@@ -57,10 +57,25 @@ public class VoiceRecorder : MonoBehaviour
             var json = await response.Content.ReadAsStringAsync();
             var yaSpeechResponse = JsonUtility.FromJson<YaSpeechResponse>(json);
             Debug.Log(yaSpeechResponse.result); // Выводим ответ сервера в консоль
+
+            // Сравниваем результат с ожидаемым словом
+            CheckPronunciation(yaSpeechResponse.result);
         }
         catch (Exception exc)
         {
             Debug.LogError(exc.Message); // Логируем ошибки
+        }
+    }
+
+    private void CheckPronunciation(string recognizedWord)
+    {
+        if (recognizedWord.Equals(wordCheck, StringComparison.OrdinalIgnoreCase))
+        {
+            UpdateInfoText("Правильное произношение!");
+        }
+        else
+        {
+            UpdateInfoText("Неправильное произношение. Попробуйте снова.");
         }
     }
 
